@@ -33,13 +33,15 @@ class Router
 	{
 		$parsedUrl = parse_url($url);
 		
-		$controllerName = str_replace(BASE_URL, '', $parsedUrl['path']);
-		$fullContollerName = '\\controllers\\' 
-			. ucfirst(ucfirst(strtolower($controllerName))) . 'Controller';
-
-		if (!class_exists($fullContollerName, true))
+		$buffer = explode('/', str_replace(BASE_URL, '', $parsedUrl['path']));
+		$sectionName = ucfirst(strtolower(array_shif($buffer)));
+		$fullContollerName = '\\controllers\\' . $sectionName . 'Controller';
+		$fullModelName = '\\models\\' . $sectionName . 'Model';
+		if (!(class_exists($fullContollerName, true)
+				&& class_exists($fullModelName, true)))
 		{
-			$this->response->addDebug($controllerName);
+			$this->response->addDebug($fullContollerName);
+			$this->response->addDebug($fullModelName);
 			$this->response->addError('LANG_wrong_api_function');
 			return;
 		}
@@ -49,7 +51,12 @@ class Router
 			$this->controller = new $fullContollerName();
 			$this->controller->initVariables($this->db, $this->user,
 					$this->response);
+			
+			$model = new $fullModelName();
+			$model->setDb($this->db);
 
+			$this->controller->setModel($model);
+			$this->controller->setRequestParams($buffer);
 			$this->controller->preResponse();
 
 			$this->controller->run();

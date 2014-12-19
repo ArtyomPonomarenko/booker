@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS `EMPLOYEES` (
   `Email` varchar(255) NOT NULL,
   `Name` varchar(255) NOT NULL,
   PRIMARY KEY (`Id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 -- --------------------------------------------------------
 
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `EVENTS` (
   `End` datetime NOT NULL,
   `DataId` int(11) NOT NULL,
   PRIMARY KEY (`Id`),
-  KEY `Start` (`Start`,`End`,`DataId`)
+  KEY `Start` (`Start`,`End`,`DataId`) --@TODO DataId - separate key
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -87,6 +87,8 @@ CREATE TABLE IF NOT EXISTS `USERS` (
   `LastLogin` datetime NOT NULL,
   `Name` varchar(255) NOT NULL,
   `Clearance` int(11) NOT NULL,
+-- Language en, ua
+-- TimeFormat 12h, 24h
   UNIQUE KEY `Email` (`Email`),
   KEY `Password` (`Password`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

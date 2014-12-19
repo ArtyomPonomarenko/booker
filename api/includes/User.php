@@ -16,4 +16,8 @@ class User
 	{
 
 	}
+	
+	public function isAdmin()
+	{
+	}
 }

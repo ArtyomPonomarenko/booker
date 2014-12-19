@@ -10,35 +10,45 @@ use includes\UserDataLoader;
  */
 class LoginController extends Controller
 {
-	public function run()
+	public function initPut()
 	{
-		if (parent::MTHD_PUT != $this->getRequestMethod())
-		{
-			throw new \RequestMethodException('Login use only PUT method');
-		}
-
-		$putData = UserDataLoader::getPutInfo();
-
-		if (!isset($putData->login, $putData->password))
+		if (!isset($this->data->login, $this->data->password))
 		{
 			throw new \InvalidParamException('login and password is needed'
 					. ' to login');
 		}
 
-		$model = new \models\LoginModel($this->db);
+		$this->defaultModel = new \models\LoginModel($this->db);
 
-		if ($model->validLogin($putData->login, $putData->password))
+		if ($this->defaultModel->validLogin($this->data->login,
+				$this->data->password))
 		{
-			$userInfo = $model->getUserInfo($putData->login);
+			$userInfo = $this->defaultModel->getUserInfo($this->data->login);
 			$this->response->setUserCookie('UserInfo',
 				json_encode($userInfo));
-			$this->response->setSecureCookie('LoginInfo', $putData->login . '::'
-					. $model->getPass($putData->login));
-			$model->updateLastLogin($userInfo['Email']);
+			$this->response->setSecureCookie('LoginInfo', $this->data->login
+					. '::' . $this->defaultModel->getPass($this->data->login));
+			$this->defaultModel->updateLastLogin($userInfo['Email']);
+			$this->response->addOk('LANG_login_succesfull');
 		}
 		else
 		{
 			$this->response->addError('LANG_invalid_user_password');
 		}
+	}
+
+	public function initPost()
+	{
+		throw new \RequestMethodException('Login use only PUT method');
+	}
+
+	public function initDelete()
+	{
+		throw new \RequestMethodException('Login use only PUT method');
+	}
+
+	public function initGet()
+	{
+		throw new \RequestMethodException('Login use only PUT method');
 	}
 }

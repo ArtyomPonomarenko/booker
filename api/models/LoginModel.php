@@ -6,7 +6,7 @@ namespace models;
  *
  * @author aponomarenko
  */
-class LoginModel
+class LoginModel extends \includes\core\Model
 {
 	/** @var array hash-table with user's info */
 	private $userInfoCache = array();
@@ -20,7 +20,6 @@ class LoginModel
 	}
 
 	/**
-	 *
 	 * @param type $email
 	 * @param type $password
 	 * @return boolean
@@ -30,7 +29,7 @@ class LoginModel
 		if (($sth = $this->dbManager->prepare("select * from USERS "
 				. " where email = ? and password = PASSWORD(?)")) !== false)
 		{
-			if ($sth->execute(array($email, $password)))
+			if ($sth->execute(array($email, $password)) && $sth->rowCount() > 0)
 			{
 				$this->userInfoCache[$email] = $sth->fetch();
 				return true;
@@ -80,7 +79,7 @@ class LoginModel
 		if (($sth = $this->dbManager->prepare("select * from USERS "
 				. " where email = ?")) !== false)
 		{
-			if ($sth->execute(array($email)))
+			if ($sth->execute(array($email)) && $sth->rowCount() > 0)
 			{
 				$result = $sth->fetch();
 			}

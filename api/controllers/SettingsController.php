@@ -9,6 +9,31 @@ use \includes\core\Controller;
  */
 class SettingsController extends Controller
 {
-	public function run();
-	public function __construct();
+	public function preResponse()
+	{
+		if (!$this->user->authenticate())
+		{
+			throw new \AcessDeniedException('Authorize use only');
+		}
+	}
+
+	public function initPut()
+	{
+
+	}
+
+	public function initPost()
+	{
+
+	}
+
+	public function initGet()
+	{
+
+	}
+
+	public function initDelete()
+	{
+
+	}
 }

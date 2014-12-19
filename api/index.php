@@ -28,7 +28,7 @@ catch (\DBException $e)
 	exit(); //no db connection no api, sorry :(
 }
 
-$user = new \includes\User($bookerDb, $i18n);
+$user = new \includes\User($bookerDb, $i18n);//@TODO Utils::getUser($db, $i18n); @return User | GuestUser
 
 $router = new \includes\core\Router($user, $response, $bookerDb);
 

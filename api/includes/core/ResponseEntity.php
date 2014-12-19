@@ -14,7 +14,7 @@ class ResponseEntity
     private $errors = array();
     private $oks = array();
     private $debugs = array();
-    private $result;
+    private $result = array();
 
     public function __construct(\includes\I18n $i18n)
     {
@@ -36,7 +36,10 @@ class ResponseEntity
 		$this->oks[] = $this->i18n->getString($msg);
     }
 
-	public function add(Result $result) {}
+	public function add(Array $result)
+	{
+
+	}
 
 	public function setUserCookie($name, $value)
 	{
@@ -69,13 +72,13 @@ class ResponseEntity
 			$result['Messages'] = $this->oks;
 		}
 
-		if ($this->result instanceof Result)
+		if ($this->result)
 		{
-			$result['data'] = $this->result->getData();
-			if ($result->getHttpCode())
-			{
-				header($result->getHttpCode());
-			}
+			$result['data'] = json_encode($this->result);
+		}
+		elseif (!isset($result['success']))
+		{
+			$result['success'] = false;
 		}
 
 		if (RUN_MODE == DEBUG_MODE && count($this->debugs) > 0)

@@ -1,13 +1,11 @@
 <?php
+namespace includes\core;
+
 /**
- * Description of Service
+ * Description of Model
  *
  * @author aponomarenko
  */
-abstract class Model
+class Model
 {
-	/**
-	 * must return includes\core\Result
-	 */
-	public abstract function getData($url);
 }
